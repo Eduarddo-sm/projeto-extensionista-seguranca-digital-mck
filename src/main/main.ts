@@ -161,7 +161,6 @@ const conteudos = {
 type ConteudosKey = keyof typeof conteudos;
 
 function popularBoxes() {
-  console.log(Object.keys(conteudos));
   Object.keys(conteudos).forEach(id => {
     const elemento = document.getElementById(id);
     if (elemento) {
