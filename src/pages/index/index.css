@@ -221,6 +221,15 @@ aside ol li a:hover {
   border-bottom: none;
 }
 
+footer {
+  width: 100%;
+  padding: 15px 0;
+  text-align: center;
+  background: rgb(0, 0, 28);
+  color: whitesmoke;
+  font-size: 1rem;
+}
+
 /* Responsividade */
 @media (max-width: 1024px) {
   main {
