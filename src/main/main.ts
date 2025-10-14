@@ -158,11 +158,13 @@ const conteudos = {
 };
 
 
+type ConteudosKey = keyof typeof conteudos;
+
 function popularBoxes() {
   Object.keys(conteudos).forEach(id => {
     const elemento = document.getElementById(id);
     if (elemento) {
-      elemento.innerHTML = conteudos[id];
+      elemento.innerHTML = conteudos[id as ConteudosKey];
     }
   });
 }
