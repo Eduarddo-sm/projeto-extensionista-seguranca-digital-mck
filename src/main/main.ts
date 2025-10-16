@@ -1,3 +1,6 @@
+import { salvarPesquisa } from '../config/supabase';
+import type { PesquisaGolpeDigital } from '../config/supabase';
+
 const conteudos = {
   praticasDeSeguranca: `
     <h2>1. Práticas de Segurança</h2>
@@ -639,7 +642,6 @@ function inicializarFormulario() {
           inputElement.setCustomValidity('');
         }
       } else if (inputElement.type === 'checkbox') {
-      
         const checkboxGroup = currentStepElement.querySelectorAll(`[name="${inputElement.name}"]`);
         const isChecked = Array.from(checkboxGroup).some(cb => (cb as HTMLInputElement).checked);
         if (!isChecked && inputElement.hasAttribute('required')) {
@@ -652,6 +654,43 @@ function inicializarFormulario() {
         }
       }
     });
+
+  
+    if (currentStep === 2 && sofreuGolpeValue === 'sim') {
+
+      const tipoGolpeChecked = currentStepElement.querySelectorAll('input[name="tipoGolpe"]:checked');
+      if (tipoGolpeChecked.length === 0) {
+        isValid = false;
+        alert('Por favor, selecione pelo menos um tipo de golpe.');
+      }
+    }
+
+    if (currentStep === 3 && sofreuGolpeValue === 'sim') {
+ s
+      const impactosChecked = currentStepElement.querySelectorAll('input[name="impactos"]:checked');
+      if (impactosChecked.length === 0) {
+        isValid = false;
+        alert('Por favor, selecione pelo menos um tipo de impacto.');
+      }
+    }
+
+    if (currentStep === 4) {
+ 
+      const mudancasChecked = currentStepElement.querySelectorAll('input[name="mudancas"]:checked');
+      if (mudancasChecked.length === 0) {
+        isValid = false;
+        alert('Por favor, selecione pelo menos uma mudança de comportamento.');
+      }
+    }
+
+    if (currentStep === 5) {
+
+      const recursosChecked = currentStepElement.querySelectorAll('input[name="recursos"]:checked');
+      if (recursosChecked.length === 0) {
+        isValid = false;
+        alert('Por favor, selecione pelo menos um tipo de recurso.');
+      }
+    }
 
     return isValid;
   }
@@ -684,7 +723,7 @@ function inicializarFormulario() {
     }
   });
 
-  // Lógica condicional - Sofreu golpe
+
   const sofreuGolpe = form.querySelectorAll('input[name="sofreuGolpe"]');
   const golpeDetalhes = document.getElementById('golpeDetalhes');
 
@@ -695,13 +734,9 @@ function inicializarFormulario() {
       
       if (target.value === 'sim') {
         golpeDetalhes!.style.display = 'block';
-        // Tornar campos obrigatórios
-        golpeDetalhes?.querySelectorAll('input, select, textarea').forEach(input => {
-          if (input.getAttribute('name') !== 'tipoGolpeOutro' && 
-              input.getAttribute('name') !== 'canalGolpeOutro' && 
-              input.getAttribute('name') !== 'comoDescobriuOutro') {
-            input.setAttribute('required', 'true');
-          }
+   
+        golpeDetalhes?.querySelectorAll('input[type="radio"], input[type="text"]:not([name*="Outro"]), select, textarea').forEach(input => {
+          input.setAttribute('required', 'true');
         });
       } else {
         golpeDetalhes!.style.display = 'none';
@@ -766,7 +801,8 @@ function inicializarFormulario() {
   });
 
 
-  form.addEventListener('submit', (e) => {
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     if (!validateCurrentStep()) {
@@ -775,16 +811,84 @@ function inicializarFormulario() {
     }
 
 
-    const formData = new FormData(form);
-    console.log('Dados do formulário:', Object.fromEntries(formData));
-    
-    alert('Obrigado por participar da pesquisa! Suas respostas foram registradas.');
-    form.reset();
-    currentStep = 1;
-    showStep(1);
-    sofreuGolpeValue = '';
-  });
+    btnSubmit.disabled = true;
+    btnSubmit.textContent = 'Enviando...';
 
+    try {
+      const formData = new FormData(form);
+      
+
+      const tiposGolpe = Array.from(form.querySelectorAll('input[name="tipoGolpe"]:checked'))
+        .map(input => (input as HTMLInputElement).value);
+      
+      const impactos = Array.from(form.querySelectorAll('input[name="impactos"]:checked'))
+        .map(input => (input as HTMLInputElement).value);
+      
+      const mudancas = Array.from(form.querySelectorAll('input[name="mudancas"]:checked'))
+        .map(input => (input as HTMLInputElement).value);
+      
+      const recursos = Array.from(form.querySelectorAll('input[name="recursos"]:checked'))
+        .map(input => (input as HTMLInputElement).value);
+
+
+      const dados: PesquisaGolpeDigital = {
+
+        faixa_etaria: formData.get('faixaEtaria') as string,
+        genero: formData.get('genero') as string,
+        genero_outro: formData.get('generoOutro') as string || undefined,
+        localizacao: formData.get('localizacao') as string,
+        escolaridade: formData.get('escolaridade') as string,
+        familiaridade_tech: formData.get('familiaridadeTech') as string,
+        
+ 
+        sofreu_golpe: formData.get('sofreuGolpe') === 'sim',
+        tipos_golpe: tiposGolpe.length > 0 ? tiposGolpe : undefined,
+        tipo_golpe_outro: formData.get('tipoGolpeOutro') as string || undefined,
+        canal_golpe: formData.get('canalGolpe') as string || undefined,
+        canal_golpe_outro: formData.get('canalGolpeOutro') as string || undefined,
+        quando_ocorreu: formData.get('quandoOcorreu') as string || undefined,
+        como_descobriu: formData.get('comoDescobriu') as string || undefined,
+        como_descobriu_outro: formData.get('comoDescobriuOutro') as string || undefined,
+        
+    
+        prejuizo_financeiro: formData.get('prejuizoFinanceiro') === 'sim',
+        valor_perdido: formData.get('valorPerdido') as string || undefined,
+        impactos: impactos.length > 0 ? impactos : undefined,
+        impactos_outro: formData.get('impactosOutro') as string || undefined,
+        tempo_resolucao: formData.get('tempoResolucao') as string || undefined,
+        
+
+        denunciou: formData.get('denunciou') === 'sim',
+        onde_denunciou: formData.get('ondeDenunciou') as string || undefined,
+        motivo_nao_denuncia: formData.get('motivoNaoDenuncia') as string || undefined,
+        motivo_nao_denuncia_outro: formData.get('motivoNaoDenunciaOutro') as string || undefined,
+        mudancas_seguranca: mudancas.length > 0 ? mudancas : undefined,
+        confianca_identificar: parseInt(formData.get('confiancaIdentificar') as string) || undefined,
+        
+   
+        prevencao_opiniao: formData.get('prevencao') as string || undefined,
+        recursos_ajuda: recursos.length > 0 ? recursos : undefined,
+        recursos_outro: formData.get('recursosOutro') as string || undefined,
+        impacto_global: parseInt(formData.get('impactoGlobal') as string) || undefined,
+      };
+
+
+      await salvarPesquisa(dados);
+      
+      alert('Obrigado por participar da pesquisa! Suas respostas foram registradas com sucesso.');
+      form.reset();
+      currentStep = 1;
+      showStep(1);
+      sofreuGolpeValue = '';
+      
+    } catch (error) {
+      console.error('Erro ao enviar formulário:', error);
+      alert('Ocorreu um erro ao enviar suas respostas. Por favor, tente novamente.');
+    } finally {
+      btnSubmit.disabled = false;
+      btnSubmit.textContent = 'Enviar Respostas';
+    }
+  });
 
   showStep(1);
 }
