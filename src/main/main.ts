@@ -882,7 +882,7 @@ function inicializarFormulario() {
     } catch (error) {
       console.error('Erro ao enviar formulário:', error);
       const msg = (error instanceof Error) ? error.message : String(error);
-      alert('Ocorreu um erro ao enviar suas respostas');
+      alert('Ocorreu um erro ao enviar suas respostas' + msg);
     } finally {
       btnSubmit.disabled = false;
       btnSubmit.textContent = 'Enviar Respostas';
