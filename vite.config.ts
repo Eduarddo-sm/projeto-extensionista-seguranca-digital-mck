@@ -24,6 +24,12 @@ export default defineConfig({
 	build: {
 		outDir: 'dist',
 		sourcemap: true,
+		rollupOptions: {
+			input: {
+				main: path.resolve(__dirname, 'index.html'),
+				relatos: path.resolve(__dirname, 'src/pages/relatos/relatos.html'),
+			},
+		},
 	},
 
 	envPrefix: 'VITE_',
