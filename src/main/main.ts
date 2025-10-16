@@ -695,14 +695,80 @@ function inicializarFormulario() {
   }
 
 
-  btnNext.addEventListener('click', () => {
+  btnNext.addEventListener('click', async () => {
     if (!validateCurrentStep()) {
       alert('Por favor, preencha todos os campos obrigatórios antes de prosseguir.');
       return;
     }
 
- 
+    
     if (currentStep === 2 && sofreuGolpeValue === 'nao') {
+      btnNext.disabled = true;
+      btnNext.textContent = 'Enviando...';
+      try {
+        const formData = new FormData(form);
+
+        const tiposGolpe = Array.from(form.querySelectorAll('input[name="tipoGolpe"]:checked'))
+          .map(input => (input as HTMLInputElement).value);
+        const impactos = Array.from(form.querySelectorAll('input[name="impactos"]:checked'))
+          .map(input => (input as HTMLInputElement).value);
+        const mudancas = Array.from(form.querySelectorAll('input[name="mudancas"]:checked'))
+          .map(input => (input as HTMLInputElement).value);
+        const recursos = Array.from(form.querySelectorAll('input[name="recursos"]:checked'))
+          .map(input => (input as HTMLInputElement).value);
+
+        const dados: PesquisaGolpeDigital = {
+          faixa_etaria: formData.get('faixaEtaria') as string,
+          genero: formData.get('genero') as string,
+          genero_outro: formData.get('generoOutro') as string || undefined,
+          localizacao: formData.get('localizacao') as string,
+          escolaridade: formData.get('escolaridade') as string,
+          familiaridade_tech: formData.get('familiaridadeTech') as string,
+
+          sofreu_golpe: formData.get('sofreuGolpe') === 'sim',
+          tipos_golpe: tiposGolpe.length > 0 ? tiposGolpe : undefined,
+          tipo_golpe_outro: formData.get('tipoGolpeOutro') as string || undefined,
+          canal_golpe: formData.get('canalGolpe') as string || undefined,
+          canal_golpe_outro: formData.get('canalGolpeOutro') as string || undefined,
+          quando_ocorreu: formData.get('quandoOcorreu') as string || undefined,
+          como_descobriu: formData.get('comoDescobriu') as string || undefined,
+          como_descobriu_outro: formData.get('comoDescobriuOutro') as string || undefined,
+
+          prejuizo_financeiro: formData.get('prejuizoFinanceiro') === 'sim',
+          valor_perdido: formData.get('valorPerdido') as string || undefined,
+          impactos: impactos.length > 0 ? impactos : undefined,
+          impactos_outro: formData.get('impactosOutro') as string || undefined,
+          tempo_resolucao: formData.get('tempoResolucao') as string || undefined,
+
+          denunciou: formData.get('denunciou') === 'sim',
+          onde_denunciou: formData.get('ondeDenunciou') as string || undefined,
+          motivo_nao_denuncia: formData.get('motivoNaoDenuncia') as string || undefined,
+          motivo_nao_denuncia_outro: formData.get('motivoNaoDenunciaOutro') as string || undefined,
+          mudancas_seguranca: mudancas.length > 0 ? mudancas : undefined,
+          confianca_identificar: parseInt(formData.get('confiancaIdentificar') as string) || undefined,
+
+          prevencao_opiniao: formData.get('prevencao') as string || undefined,
+          recursos_ajuda: recursos.length > 0 ? recursos : undefined,
+          recursos_outro: formData.get('recursosOutro') as string || undefined,
+          impacto_global: parseInt(formData.get('impactoGlobal') as string) || undefined,
+        };
+
+        await salvarPesquisa(dados);
+        alert('Obrigado por participar da pesquisa! Suas respostas foram registradas com sucesso.');
+        form.reset();
+        currentStep = 1;
+        showStep(1);
+        sofreuGolpeValue = '';
+      } catch (error) {
+        console.error('Erro ao enviar respostas no passo 2:', error);
+        const msg = (error instanceof Error) ? error.message : String(error);
+        alert('Ocorreu um erro ao enviar suas respostas: ' + msg + '\nVerifique o console para detalhes.');
+      } finally {
+        btnNext.disabled = false;
+        btnNext.textContent = 'Prosseguir ' + String.fromCharCode(0x2192);
+      }
+
+      // show thank you after attempt (successful or not)
       document.getElementById('agradecimento')!.style.display = 'block';
       steps.forEach(s => s.classList.remove('active'));
       return;

@@ -571,7 +571,7 @@ footer {
 @media (max-width: 1024px) {
   .boxes {
     width: 90%;
-    padding: 30px;
+    padding: 20px;
   }
 
   aside {
