@@ -666,7 +666,6 @@ function inicializarFormulario() {
     }
 
     if (currentStep === 3 && sofreuGolpeValue === 'sim') {
- s
       const impactosChecked = currentStepElement.querySelectorAll('input[name="impactos"]:checked');
       if (impactosChecked.length === 0) {
         isValid = false;
@@ -874,8 +873,7 @@ function inicializarFormulario() {
 
 
       await salvarPesquisa(dados);
-      
-      alert('Obrigado por participar da pesquisa! Suas respostas foram registradas com sucesso.');
+    alert('Obrigado por participar da pesquisa! Suas respostas foram registradas com sucesso.');
       form.reset();
       currentStep = 1;
       showStep(1);
@@ -883,7 +881,8 @@ function inicializarFormulario() {
       
     } catch (error) {
       console.error('Erro ao enviar formulário:', error);
-      alert('Ocorreu um erro ao enviar suas respostas. Por favor, tente novamente.');
+      const msg = (error instanceof Error) ? error.message : String(error);
+      alert('Ocorreu um erro ao enviar suas respostas');
     } finally {
       btnSubmit.disabled = false;
       btnSubmit.textContent = 'Enviar Respostas';

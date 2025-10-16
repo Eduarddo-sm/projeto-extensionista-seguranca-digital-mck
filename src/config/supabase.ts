@@ -1,7 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+const supabaseUrl = (import.meta.env.VITE_SUPABASE_URL as string) || '';
+const supabaseAnonKey = (import.meta.env.VITE_SUPABASE_ANON_KEY as string) || '';
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.warn('[supabase] Missing environment variables: VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY. Check Vercel env settings and RLS policies.');
+}
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -47,14 +51,22 @@ export interface PesquisaGolpeDigital {
 }
 
 export async function salvarPesquisa(dados: PesquisaGolpeDigital) {
+
   const { data, error } = await supabase
     .from('pesquisa_golpes_digitais')
     .insert([dados])
     .select();
 
   if (error) {
-    console.error('Erro ao salvar pesquisa:', error);
-    throw error;
+    console.error('[salvarPesquisa] Erro ao salvar pesquisa:', {
+      message: error.message,
+      details: (error as any).details,
+      hint: (error as any).hint,
+      code: (error as any).code,
+    });
+
+    const combined = `Supabase error: ${error.message}${(error as any).details ? ' - ' + (error as any).details : ''}`;
+    throw new Error(combined);
   }
 
   return data;
