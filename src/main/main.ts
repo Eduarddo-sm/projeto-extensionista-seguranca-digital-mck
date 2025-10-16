@@ -617,8 +617,6 @@ function inicializarFormulario() {
       btnSubmit.style.display = 'none';
     }
 
- 
-    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
 
@@ -768,7 +766,6 @@ function inicializarFormulario() {
         btnNext.textContent = 'Prosseguir ' + String.fromCharCode(0x2192);
       }
 
-      // show thank you after attempt (successful or not)
       document.getElementById('agradecimento')!.style.display = 'block';
       steps.forEach(s => s.classList.remove('active'));
       return;
