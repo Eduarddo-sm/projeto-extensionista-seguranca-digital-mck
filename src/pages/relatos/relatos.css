@@ -71,6 +71,28 @@ main {
   padding: 10px;
 }
 
+.container {
+  width: 90%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-wrap: anywhere;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.container h1 {
+  font-size:  5rem;
+}
+
+.card-container {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
 footer {
   width: 100%;
   padding: 15px 0;
