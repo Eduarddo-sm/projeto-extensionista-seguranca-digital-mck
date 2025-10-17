@@ -378,6 +378,7 @@ export function initFormularioNavegacao() {
   });
 
 
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -387,7 +388,7 @@ export function initFormularioNavegacao() {
 
     const formData = new FormData(form);
     
-    
+   
     const dados: PesquisaSegurancaIA = {
       idade: parseInt(formData.get('idade') as string),
       area_atuacao: formData.get('areaAtuacao') as string,
@@ -418,8 +419,8 @@ export function initFormularioNavegacao() {
       await salvarPesquisaSegurancaIA(dados);
 
       document.querySelectorAll('.form-step').forEach(s => (s as HTMLElement).style.display = 'none');
-      document.querySelector('.form-navigation')!.style.display = 'none';
-      document.getElementById('agradecimento')!.style.display = 'block';
+      (document.querySelector('.form-navigation') as HTMLElement).style.display = 'none';
+      (document.getElementById('agradecimento') as HTMLElement).style.display = 'block';
 
       setTimeout(() => {
         form.reset();
@@ -427,7 +428,7 @@ export function initFormularioNavegacao() {
         showStep(currentStep, false);
         document.querySelectorAll('.form-step').forEach(s => (s as HTMLElement).style.display = '');
         (document.querySelector('.form-navigation') as HTMLElement).style.display = 'flex';
-        document.getElementById('agradecimento')!.style.display = 'none';
+        (document.getElementById('agradecimento') as HTMLElement).style.display = 'none';
         btnSubmit.disabled = false;
         btnSubmit.textContent = 'Enviar Respostas';
       }, 5000);
