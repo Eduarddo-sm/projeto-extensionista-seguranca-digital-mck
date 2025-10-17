@@ -27,7 +27,6 @@ export default defineConfig({
 		rollupOptions: {
 			input: {
 				main: path.resolve(__dirname, 'index.html'),
-				relatos: path.resolve(__dirname, 'src/pages/relatos/relatos.html'),
 				indices: path.resolve(__dirname, 'src/pages/indices/indices.html'),
 			},
 		},
