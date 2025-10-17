@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Indicadores de Segurança Digital e IA</title>
+  <link rel="stylesheet" href="./indices.css">
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <a href="/index.html" class="btn-back">
+        <span>←</span>
+        Voltar
+      </a>
+      <h1>Dashboard de Segurança Digital e IA</h1>
+    </div>
+    <div class="header-stats">
+  </header>
+
+  <div class="container">
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p>Carregando dados...</p>
+    </div>
+
+    <div class="error-message" id="error-message" style="display: none;">
+      <p id="error-text"></p>
+    </div>
+
+    <div class="dashboard" id="dashboard" style="display: none;">
+      
+  
+      <section class="section">
+        <h2>👥 Perfil Demográfico</h2>
+        <div class="cards-grid">
+          <div class="kpi-card">
+            <h3>Distribuição de Idades</h3>
+            <div class="age-stats">
+              <div class="stat-item">
+                <span class="label">Média:</span>
+                <span class="value" id="idade-media">-</span>
+              </div>
+              <div class="stat-item">
+                <span class="label">Mínima:</span>
+                <span class="value" id="idade-min">-</span>
+              </div>
+              <div class="stat-item">
+                <span class="label">Máxima:</span>
+                <span class="value" id="idade-max">-</span>
+              </div>
+              <div class="stat-item">
+                <span class="label">Mediana:</span>
+                <span class="value" id="idade-mediana">-</span>
+              </div>
+            </div>
+            <canvas id="chart-idade"></canvas>
+          </div>
+
+          <div class="kpi-card">
+            <h3>Área de Atuação</h3>
+            <canvas id="chart-area-atuacao"></canvas>
+          </div>
+
+          <div class="kpi-card">
+            <h3>Nível de Conhecimento em TI</h3>
+            <canvas id="chart-conhecimento-ti"></canvas>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="section">
+        <h2>🤖 Inteligência Artificial</h2>
+        <div class="cards-grid">
+          <div class="kpi-card">
+            <h3>Uso de Ferramentas de IA</h3>
+            <div class="percentage-display">
+              <div class="percentage-circle" id="ia-percentage-circle">
+                <span id="ia-percentage">-</span>
+              </div>
+            </div>
+            <canvas id="chart-uso-ia"></canvas>
+          </div>
+
+          <div class="kpi-card">
+            <h3>Ferramentas de IA Mais Citadas</h3>
+            <canvas id="chart-ferramentas-ia"></canvas>
+          </div>
+
+          <div class="kpi-card">
+            <h3>Confiança na IA x Conhecimento em TI</h3>
+            <canvas id="chart-confianca-ia-ti"></canvas>
+          </div>
+
+          <div class="kpi-card">
+            <h3>Papel da IA na Segurança</h3>
+            <canvas id="chart-papel-ia"></canvas>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="section">
+        <h2>🔐 Criptografia</h2>
+        <div class="cards-grid">
+          <div class="kpi-card">
+            <h3>Uso de Criptografia</h3>
+            <canvas id="chart-uso-criptografia"></canvas>
+          </div>
+
+          <div class="kpi-card">
+            <h3>Tipos de Criptografia Utilizados</h3>
+            <canvas id="chart-tipos-criptografia"></canvas>
+          </div>
+
+          <div class="kpi-card">
+            <h3>Conhecimento x Uso de Criptografia</h3>
+            <canvas id="chart-conhecimento-uso-cripto"></canvas>
+          </div>
+
+          <div class="kpi-card">
+            <h3>Nível de Conhecimento em Criptografia</h3>
+            <canvas id="chart-nivel-conhecimento-cripto"></canvas>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="section">
+        <h2>🔒 Privacidade</h2>
+        <div class="cards-grid">
+          <div class="kpi-card">
+            <h3>Preocupação com Privacidade</h3>
+            <canvas id="chart-preocupacao-privacidade"></canvas>
+          </div>
+
+          <div class="kpi-card">
+            <h3>Práticas de Privacidade Adotadas</h3>
+            <canvas id="chart-praticas-privacidade"></canvas>
+          </div>
+
+          <div class="kpi-card">
+            <h3>Preocupação x Ações Concretas</h3>
+            <canvas id="chart-preocupacao-acoes"></canvas>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="section">
+        <h2>⚛️ Criptografia Pós-Quântica</h2>
+        <div class="cards-grid">
+          <div class="kpi-card">
+            <h3>Conhecimento sobre Pós-Quântica</h3>
+            <canvas id="chart-conhece-pos-quantica"></canvas>
+          </div>
+
+          <div class="kpi-card">
+            <h3>Conhecimento TI x Pós-Quântica</h3>
+            <canvas id="chart-ti-pos-quantica"></canvas>
+          </div>
+
+          <div class="kpi-card">
+            <h3>Importância Atribuída</h3>
+            <canvas id="chart-importancia-pos-quantica"></canvas>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="section">
+        <h2>🛡️ Práticas de Segurança</h2>
+        <div class="cards-grid">
+          <div class="kpi-card">
+            <h3>Frequência de Backups</h3>
+            <canvas id="chart-backups"></canvas>
+          </div>
+
+          <div class="kpi-card">
+            <h3>Atualização de Softwares</h3>
+            <canvas id="chart-atualizacoes"></canvas>
+          </div>
+
+          <div class="kpi-card">
+            <h3>Uso de Autenticação 2FA</h3>
+            <canvas id="chart-2fa"></canvas>
+          </div>
+
+          <div class="kpi-card">
+            <h3>Nível Geral de Segurança (Autoavaliação)</h3>
+            <canvas id="chart-nivel-seguranca"></canvas>
+          </div>
+
+          <div class="kpi-card full-width">
+            <h3>Práticas x Percepção de Segurança</h3>
+            <canvas id="chart-praticas-percepcao"></canvas>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="section">
+        <h2>📱 Dispositivos e Contexto</h2>
+        <div class="cards-grid">
+          <div class="kpi-card">
+            <h3>Tipo de Dispositivo</h3>
+            <canvas id="chart-dispositivos"></canvas>
+          </div>
+
+          <div class="kpi-card">
+            <h3>Dispositivo x Práticas de Segurança</h3>
+            <canvas id="chart-dispositivo-seguranca"></canvas>
+          </div>
+
+          <div class="kpi-card">
+            <h3>Horário de Acesso</h3>
+            <canvas id="chart-horario-acesso"></canvas>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script type="module" src="/src/main/indices.ts"></script>
+</body>
+</html>

@@ -65,3 +65,23 @@ export async function salvarPesquisaSegurancaIA(dados: PesquisaSegurancaIA) {
 
   return data;
 }
+
+export async function buscarTodasPesquisas() {
+  const { data, error } = await supabase
+    .from('pesquisa_seguranca_ia')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('[buscarTodasPesquisas] Erro ao buscar pesquisas:', {
+      message: error.message,
+      details: (error as any).details,
+      hint: (error as any).hint,
+      code: (error as any).code,
+    });
+
+    throw new Error(`Erro ao buscar pesquisas: ${error.message}`);
+  }
+
+  return data as PesquisaSegurancaIA[];
+}
