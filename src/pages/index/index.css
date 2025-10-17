@@ -360,6 +360,10 @@ aside ol li ul li a {
   border-bottom: none;
 }
 
+.boxes #otimizacaoCriptografia {
+    overflow-wrap: anywhere;
+}
+
 footer {
   width: 100%;
   padding: 25px 0;
